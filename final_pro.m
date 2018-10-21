@@ -1,19 +1,35 @@
 clc;
 v = read_values("rest.txt");
 s = create_cw_struct(v);
-s.Re = 690.72;    
+disp(s);
 general_equation(s);
 varying_diameters(s);
 
-function s = create_cw_struct(values)
-    c = cell(1,2*length(values{1}));
-    for i = 1:length(values{1})
-        c{2*i - 1} = values{1}{i};
-        c{2*i} = values{2}(i);
+% Compute reynold's number and store it in cw_s
+function Re = Reynolds_equation(cw_s)
+
+    cw_s.Area = pi*cw_s.D^2/4;
+    
+    Re = cw_s.Q*cw_s.D/(cw_s.V*cw_s.Area);
+
+end
+
+function cw_s = create_cw_struct(values)
+    rows = length(values{1});
+    c = cell(1,2*rows);
+    % converting 10 x 2 values matrix into 1 x 20 c matrix
+    % pick constant name in column 1 of values and put it in odd position of c
+    % pick constant value in column 2 of values and put it in even position of c    
+    for row = 1:rows
+        c{2*row - 1} = values{1}{row};
+        c{2*row} = values{2}(row);
     end
-    s = struct(c{:});
-    s.ed = s.e/s.D;
-    s.Z=1/(1+(s.P1*344400*(10)^1.785*s.G/(s.t)^3.825));
+    disp(c);
+    % Spread values of c as arguments to struct function
+    cw_s = struct(c{:});
+    cw_s.ed = cw_s.e/cw_s.D;
+    cw_s.Re = Reynolds_equation(cw_s);
+    cw_s.Z=1/(1+(cw_s.P1*344400*(10)^1.785*cw_s.G/(cw_s.t)^3.825));
 end
 
 function values = read_values(file_name)
