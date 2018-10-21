@@ -153,14 +153,13 @@ function P2 = general_equation(cw_s)
 end
 
 function c = varying_diameters(cw_s) 
-   D = 15.5;
-   D_arr = [ D  D/2 3*D/4 D/4]
+    D = 15.5;
+    D_arr = [ D  D/2 3*D/4 D/4]
    
-      for D = D_arr
-          cw_s.D = D;
-          general_equation(cw_s);    
-      end
-
+    for D = D_arr
+        cw_s.D = D;
+        general_equation(cw_s);    
+    end
 end
 
 
