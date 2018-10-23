@@ -3,7 +3,7 @@ v = read_values("rest.txt");
 s = create_cw_struct(v);
 disp(s);
 general_equation(s);
-varying_diameters(s);
+varying_length(s);
 
 % Compute reynold's number and store it in cw_s
 function Re = Reynolds_equation(cw_s)
@@ -24,7 +24,6 @@ function cw_s = create_cw_struct(values)
         c{2*row - 1} = values{1}{row};
         c{2*row} = values{2}(row);
     end
-    disp(c);
     % Spread values of c as arguments to struct function
     cw_s = struct(c{:});
     cw_s.ed = cw_s.e/cw_s.D;
@@ -168,12 +167,12 @@ function P2 = general_equation(cw_s)
     disp(T);
 end
 
-function c = varying_diameters(cw_s) 
-    D = 15.5;
-    D_arr = [ D  D/2 3*D/4 D/4]
+function varying_length(cw_s) 
+    L = 15.5;
+    L_arr = [ L 25 50 75 100];
    
-    for D = D_arr
-        cw_s.D = D;
+    for L = L_arr
+        cw_s.D = L;
         general_equation(cw_s);    
     end
 end
