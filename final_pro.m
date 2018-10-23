@@ -2,7 +2,6 @@ clc;
 v = read_values("rest.txt");
 s = create_cw_struct(v);
 disp(s);
-general_equation(s);
 varying_length(s);
 
 % Compute reynold's number and store it in cw_s
