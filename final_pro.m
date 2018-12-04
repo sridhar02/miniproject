@@ -167,7 +167,7 @@ function P2 = general_equation(cw_s)
 end
 
 function varying_length(cw_s) 
-    L = 15.5;
+    L = 302;
     L_arr = [ L 25 50 75 100];
    
     for L = L_arr
