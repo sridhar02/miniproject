@@ -164,16 +164,15 @@ function P2 = general_equation(cw_s)
         E = 0.0375*cw_s.G*(cw_s.H2-cw_s.H1)/(cw_s.t*cw_s.Z);
         
         P3(j) = (cw_s.P1^2-k)^0.5/exp(E);
-        P4(j) = abs(cw_s.P1-P3(j));
         
     end   
     
-    [M,i] = min(P4);
-    cw_s.P1 = (P3(i)+cw_s.P1)/2;
+    [M,i] = min(P3);
+    cw_s.P1 = (M+cw_s.P1)/2;
     
-    
-    
-    T = table(names,f,P3);
+    cw_s.Z=1/(1+(cw_s.P1*344400*(10)^1.785*cw_s.G/(cw_s.t)^3.825))
+   
+    T = table(names,f,P2,P3);
     disp(T);
 end
 
@@ -184,7 +183,10 @@ function varying_length(cw_s)
    
     for L = L_arr
         cw_s.D = L;
-        general_equation(cw_s);    
+        
+        general_equation(cw_s);
+        
+        general_equation(cw_s);
     end
 end
 
