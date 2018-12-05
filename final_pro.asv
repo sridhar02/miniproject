@@ -26,7 +26,7 @@ function cw_s = create_cw_struct(values)
     cw_s = struct(c{:});
     cw_s.ed = cw_s.e/cw_s.D;
     cw_s.Re = Reynolds_equation(cw_s);
-    cw_s.Z=1/(1+(cw_s.P1*344400*(10)^1.785*cw_s.G/(cw_s.t)^3.825));
+    cw_s.Z=1/(1+(cw_s.PA*344400*(10)^1.785*cw_s.G/(cw_s.t)^3.825));
 end
 
 function values = read_values(file_name)
@@ -155,23 +155,27 @@ function P2 = general_equation(cw_s)
     f = [f1;f2;f3;f4;f5;f6;f7;f8;f9;f10;f11;f12];
     %calculation of pressure using different friction factor values
     P2 = zeros(length(f),1);
+    P3 = zeros(length(f),1);
     for j = 1:length(f)
         k = ((1/77.54^2)*cw_s.G*cw_s.t*cw_s.L*cw_s.Z*cw_s.Q^2*cw_s.Pb^2*f(j)/(cw_s.Tb^2*cw_s.D^5));
         
         P2(j) = (cw_s.P1^2-k)^0.5;
-        E = 0.0375 
+        E = 0.0375*cw_s.G*(cw_s.H2-cw_s.H1)/(cw_s.t*cw_s.Z);
         
-        P3(j) = (cw_s.P1^2-k)^0.5/e^E;
+        P3(j) = (cw_s.P1^2-k)^0.5/exp(E);
+        P4(j) = abs(cw_s.P1-P3(j));
         
-        
-    end    
-    T = table(names,f,P2);
+    end   
+    
+    [M,i] = min(P4)
+    cw_s.P1 = (P3(i)+cw_s.P1)/2
+    T = table(names,f,P2,P3);
     disp(T);
 end
 
 function varying_length(cw_s) 
     L = 302;
-    L_arr = [ 302 524];
+    L_arr = [ 302 ];
    
     for L = L_arr
         cw_s.D = L;
